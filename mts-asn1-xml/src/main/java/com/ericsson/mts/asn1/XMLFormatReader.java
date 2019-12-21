@@ -148,8 +148,12 @@ public class XMLFormatReader implements FormatReader {
 
     @Override
     public String bytesValue(String name) {
+        /* to solve the IE broadcastPLMNs in the SupportedTAs which can't read from xml */
         if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-            return getChildNode(getFromStack(currentNode), name).getTextContent().replaceAll("[\\t\\n\\r ]", "");
+            if (name == null)
+                return getFromStack(currentNode).getTextContent().replaceAll("[\\t\\n\\r ]", "");
+            else
+                return getChildNode(getFromStack(currentNode), name).getTextContent().replaceAll("[\\t\\n\\r ]", "");
         }
         throw new RuntimeException(String.valueOf(currentNode.getNodeType()));
     }
